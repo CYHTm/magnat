@@ -17,14 +17,14 @@ body { font-family: var(--font-body); background: #151518; color: #e8e8ec; font-
 
 /* ===== BOARD GRID ===== */
 .board-container {
-  width: min(100%, calc(100dvh - 130px), calc(100vw - 12px));
+  width: min(100%, calc(100dvh - 260px), calc(100vw - 12px));
   max-width: 600px;
   aspect-ratio: 1;
   margin: 0 auto;
 }
 @media (min-width: 640px) {
   .board-container {
-    width: min(100%, calc(100dvh - 120px), calc(100vw - 16px));
+    width: min(100%, calc(100dvh - 240px), calc(100vw - 16px));
     max-width: 640px;
   }
 }
@@ -646,7 +646,7 @@ body { font-family: var(--font-body); background: #151518; color: #e8e8ec; font-
   .cell .cell-price { font-size: 5px; }
   .token { width: 9px; height: 9px; font-size: 6px; }
   .board-center .font-display { font-size: 14px !important; }
-  .hint-bubble { bottom: 70px; }
+  .hint-bubble { bottom: 140px; }
 }
 @media (min-width: 640px) {
   .cell { font-size: 8px; }
