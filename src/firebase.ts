@@ -9,12 +9,13 @@ import { GameState } from './types';
 // Замените на свой конфиг из Firebase Console → Project Settings → Web App
 // Инструкция: см. DEPLOY.md
 const firebaseConfig = {
-  apiKey: "AIzaSyDemo-key-replace-me",
-  authDomain: "magnat-game.firebaseapp.com",
-  projectId: "magnat-game",
-  storageBucket: "magnat-game.appspot.com",
-  messagingSenderId: "000000000000",
-  appId: "1:000000000000:web:abcdef1234567890"
+  apiKey: "AIzaSyA8q4qjNExi7BFhsRPWTSmkvi0SGpC95T4",
+  authDomain: "magnatgame-43f23.firebaseapp.com",
+  projectId: "magnatgame-43f23",
+  storageBucket: "magnatgame-43f23.firebasestorage.app",
+  messagingSenderId: "631958960451",
+  appId: "1:631958960451:web:7e6c0e96d8703e1aeed7f6",
+  measurementId: "G-8BQF6L9EGY"
 };
 
 let app: ReturnType<typeof initializeApp> | null = null;
