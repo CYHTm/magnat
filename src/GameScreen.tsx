@@ -1295,29 +1295,91 @@ export default function GameScreen({ initialState, onExit, mode, onlineConfig }:
         </div>
       </div>
 
-      {/* MOBILE BOTTOM BAR */}
-      <div className="xl:hidden h-14 shrink-0 flex items-center justify-between px-2 border-t border-white/5" style={{ background: '#1a1a20' }}>
+      {/* MOBILE TOP INFO BAR */}
+      <div className="xl:hidden shrink-0 flex items-center justify-between px-3 py-2 border-b border-white/5" style={{ background: '#1a1a20' }}>
         <button onClick={() => { setShowPlayersDrawer(true); setShowControlDrawer(false); }}
-          className="px-3 py-2 rounded-lg glass text-xs font-bold">
-          👥
+          className="flex items-center gap-2 px-3 py-2 rounded-xl glass hover:bg-white/10 active:scale-95 transition-transform">
+          <span className="text-base">👥</span>
+          <span className="text-xs font-bold text-white/70">Игроки</span>
         </button>
         <div className="flex items-center gap-2">
           {mode === 'online' && (
-            <span className={`text-[10px] font-bold ${amICurrentPlayer ? 'text-green-400' : 'text-white/40'}`}>
-              {amICurrentPlayer ? '🟢' : '⏳'}
+            <span className={`text-xs font-bold ${amICurrentPlayer ? 'text-green-400' : 'text-white/40'}`}>
+              {amICurrentPlayer ? '🟢 Ваш ход' : `⏳ ${cp.name}`}
             </span>
           )}
-          <div className="w-6 h-6 rounded-full flex items-center justify-center text-xs" style={{ background: cp.color }}>{cp.token}</div>
-          <span className="text-xs font-display font-bold text-amber-400">{formatMoney(cp.money)}</span>
+          <div className="w-7 h-7 rounded-full flex items-center justify-center text-sm font-bold shadow-lg"
+            style={{ background: cp.color, boxShadow: `0 0 10px ${cp.color}60` }}>{cp.token}</div>
+          <div className="text-right">
+            <p className="text-xs font-bold leading-none">{cp.name}</p>
+            <p className="text-sm font-display font-bold text-amber-400 leading-tight">{formatMoney(cp.money)}</p>
+          </div>
         </div>
         <button onClick={() => { setShowControlDrawer(true); setShowPlayersDrawer(false); }}
-          className="px-3 py-2 rounded-lg text-xs font-bold btn-glow"
-          style={{
-            background: gs.phase === 'roll' && amICurrentPlayer ? 'linear-gradient(135deg, #ffd700, #ffaa00)' : 'rgba(255,255,255,0.06)',
-            color: gs.phase === 'roll' && amICurrentPlayer ? 'black' : 'white'
-          }}>
-          🎮
+          className="flex items-center gap-2 px-3 py-2 rounded-xl glass hover:bg-white/10 active:scale-95 transition-transform">
+          <span className="text-base">⚙️</span>
+          <span className="text-xs font-bold text-white/70">Меню</span>
         </button>
+      </div>
+
+      {/* MOBILE BOTTOM ACTION BAR */}
+      <div className="xl:hidden shrink-0 px-3 py-2 border-t border-white/5 space-y-2" style={{ background: '#1a1a20' }}>
+        {gs.phase === 'roll' && !animating && amICurrentPlayer && !cp.inJail && (
+          <button onClick={handleRoll} disabled={rolling}
+            className="w-full py-3.5 rounded-xl font-display font-bold text-base btn-glow disabled:opacity-50 text-black active:scale-95 transition-transform"
+            style={{ background: 'linear-gradient(135deg, #ffd700, #ffaa00)' }}>
+            🎲 Бросить кости
+          </button>
+        )}
+        {gs.phase === 'roll' && !animating && amICurrentPlayer && cp.inJail && (
+          <div className="flex gap-2">
+            <button onClick={handleRoll} disabled={rolling}
+              className="flex-1 py-3 rounded-xl bg-amber-600 hover:bg-amber-500 font-bold text-sm btn-glow disabled:opacity-50 active:scale-95 transition-transform">
+              🎲 Дубль
+            </button>
+            {cp.money >= 50_000 && (
+              <button onClick={handlePayJail}
+                className="flex-1 py-3 rounded-xl glass hover:bg-white/10 font-bold text-sm active:scale-95 transition-transform">
+                💸 ₽50К
+              </button>
+            )}
+            {cp.getOutOfJailCards > 0 && (
+              <button onClick={handleUseJailCard}
+                className="flex-1 py-3 rounded-xl glass hover:bg-white/10 font-bold text-sm active:scale-95 transition-transform">
+                🎫 Карточка
+              </button>
+            )}
+          </div>
+        )}
+        {gs.phase === 'roll' && !animating && !amICurrentPlayer && (
+          <div className="text-center py-3 text-sm text-white/40 font-bold">
+            ⏳ Ожидание хода: {cp.name}
+          </div>
+        )}
+        {gs.phase === 'landed' && moveResult && (
+          <div className="text-center py-2">
+            <p className="text-sm">{moveResult.messageIcon} {moveResult.message}</p>
+            <p className="text-xs text-white/30 mt-1">Ход переходит автоматически...</p>
+          </div>
+        )}
+        {animating && (
+          <div className="text-center py-3 text-sm text-white/40">
+            🎲 Перемещение...
+          </div>
+        )}
+        {/* Dice display */}
+        <div className="flex justify-center gap-3">
+          <div className="dice-scene" style={{ width: '36px', height: '36px' }}>
+            <div className={`dice-cube ${rolling ? 'rolling' : `dice-show-${gs.diceValues[0]}`}`}>
+              {[1,2,3,4,5,6].map(v => <DiceFace key={v} value={v} cls={`face-${v}`} />)}
+            </div>
+          </div>
+          <div className="dice-scene" style={{ width: '36px', height: '36px' }}>
+            <div className={`dice-cube ${rolling ? 'rolling' : `dice-show-${gs.diceValues[1]}`}`}>
+              {[1,2,3,4,5,6].map(v => <DiceFace key={v} value={v} cls={`face-${v}`} />)}
+            </div>
+          </div>
+        </div>
       </div>
 
       {/* MOBILE DRAWERS */}
